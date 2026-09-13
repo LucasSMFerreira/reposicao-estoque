@@ -1,0 +1,49 @@
+{
+  "fornecedores": [
+    {
+      "id": "FOR-001",
+      "nome": "Distribuidora Alfa",
+      "prazo_entrega_dias": 5,
+      "compra_minima": 10,
+      "multiplo_compra": 5
+    },
+    {
+      "id": "FOR-002",
+      "nome": "Atacado Beta",
+      "prazo_entrega_dias": 3,
+      "compra_minima": 1,
+      "multiplo_compra": 1
+    }
+  ],
+  "produtos": [
+    {
+      "sku": "MOUSE-001",
+      "nome": "Mouse sem fio",
+      "estoque_atual": 7,
+      "consumo_medio_diario": 4,
+      "estoque_seguranca": 5,
+      "fornecedor_id": "FOR-001",
+      "periodo_revisao_dias": 7
+    },
+    {
+      "sku": "TECLADO-001",
+      "nome": "Teclado USB",
+      "estoque_atual": 40,
+      "consumo_medio_diario": 2,
+      "estoque_seguranca": 4,
+      "fornecedor_id": "FOR-002",
+      "periodo_revisao_dias": 7
+    },
+    {
+      "sku": "CABO-001",
+      "nome": "Cabo USB-C",
+      "estoque_atual": 14,
+      "estoque_a_receber": 2,
+      "estoque_reservado": 4,
+      "consumo_medio_diario": 3,
+      "estoque_seguranca": 3,
+      "fornecedor_id": "FOR-002",
+      "periodo_revisao_dias": 7
+    }
+  ]
+}
