@@ -1,4 +1,4 @@
-# Reposição Automática de Estoque — V4
+# Reposição Automática de Estoque 
 
 Aplicação Python leve para acompanhar produtos e sugerir compras. Usa apenas a biblioteca padrão, incluindo Tkinter para a janela. Nenhum pedido é enviado automaticamente.
 
