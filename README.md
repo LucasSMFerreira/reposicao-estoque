@@ -1,5 +1,7 @@
 # Reposição Automática de Estoque 
 
+![Tela inicial da Reposição com dados fictícios](docs/screenshots/tela-inicial.png)
+
 Aplicação Python leve para acompanhar produtos e sugerir compras. Usa apenas a biblioteca padrão, incluindo Tkinter para a janela. Nenhum pedido é enviado automaticamente.
 
 ## Abrir
