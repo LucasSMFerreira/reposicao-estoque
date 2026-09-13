@@ -69,3 +69,9 @@ O programa não compra mercadorias nem efetua pagamentos. O envio acontece apena
 Este painel funciona sozinho: calcula a necessidade de reposição e registra decisões sem depender dos outros projetos. Quando o usuário aprova uma compra e ativa a API local de Contas a Pagar, o botão de envio cria a despesa correspondente com número de pedido, valor e vencimento. O [projeto de Previsão de Demanda](https://github.com/LucasSMFerreira/Previsao-demanda-estoque) pode futuramente fornecer a estimativa de consumo; essa etapa ainda não está conectada automaticamente.
 
 Os três módulos foram mantidos em repositórios separados para compor uma aplicação final sem concentrar toda a lógica em um único arquivo.
+
+## Pedidos no módulo de Compras e Fornecedores
+
+O [módulo de Compras e Fornecedores](https://github.com/LucasSMFerreira/Compra-Fornecedores) organiza a etapa seguinte à decisão de reposição. Salve o JSON de produtos, registre **Aceitar sugestão** ou **Ajustar** e, em Compras, clique em **Importar da Reposição** para escolher esse JSON e o `decisoes.csv` da mesma pasta. A decisão vira um rascunho de pedido com SKU, fornecedor e quantidade; preço e vencimento são preenchidos e conferidos em Compras antes da aprovação.
+
+Depois de aprovar, o botão **Criar conta a pagar** de Compras chama a API local de [Contas a Pagar](https://github.com/LucasSMFerreira/Controle-Contas): `POST /api/v1/pedidos-reposicao` em `127.0.0.1:8765`. O corpo contém `pedido_id`, `sku`, `produto`, `fornecedor`, `quantidade`, `valor_unitario` e `vencimento`. A resposta contém `conta_id`; repetir o mesmo `pedido_id` não duplica a conta. Se usar Compras para acompanhar o pedido, envie ao financeiro por lá em vez do botão direto desta tela. Registrar a entrega em Compras ainda não aumenta o estoque automaticamente aqui.
