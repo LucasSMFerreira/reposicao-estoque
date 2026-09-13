@@ -58,6 +58,12 @@ A lógica permanece separada da interface para facilitar o futuro executável e 
 
 ## Enviar uma compra aprovada para Contas a Pagar
 
-Abra o projeto de Contas a Pagar em outra janela, salve o arquivo de contas e clique em **Ativar ponte**. Em Reposição, selecione um produto e clique em **Aceitar sugestão** ou **Ajustar**. O programa oferece criar a conta a pagar; informe preço por unidade e vencimento. Se a API estiver desligada, a decisão fica registrada e o botão **Enviar para Contas a Pagar** permite tentar novamente. A mesma aprovação tem um número de pedido estável para evitar contas duplicadas.
+Abra o projeto de [Contas a Pagar](https://github.com/LucasSMFerreira/Controle-Contas) em outra janela, salve o arquivo de contas e clique em **Ativar ponte**. Em Reposição, selecione um produto e clique em **Aceitar sugestão** ou **Ajustar**. O programa oferece criar a conta a pagar; informe preço por unidade e vencimento. Se a API estiver desligada, a decisão fica registrada e o botão **Enviar para Contas a Pagar** permite tentar novamente. A mesma aprovação tem um número de pedido estável para evitar contas duplicadas.
 
 O programa não compra mercadorias nem efetua pagamentos. O envio acontece apenas depois de uma decisão de compra aprovada.
+
+## Como os projetos se encaixam
+
+Este painel funciona sozinho: calcula a necessidade de reposição e registra decisões sem depender dos outros projetos. Quando o usuário aprova uma compra e ativa a API local de Contas a Pagar, o botão de envio cria a despesa correspondente com número de pedido, valor e vencimento. O [projeto de Previsão de Demanda](https://github.com/LucasSMFerreira/Previsao-demanda-estoque) pode futuramente fornecer a estimativa de consumo; essa etapa ainda não está conectada automaticamente.
+
+Os três módulos foram mantidos em repositórios separados para compor uma aplicação final sem concentrar toda a lógica em um único arquivo.
