@@ -11,6 +11,7 @@ from src.database.repository import carregar_produtos
 from src.estoque.models import Produto
 from src.interface.app import CAMPOS, criar_produto_dos_campos
 from src.reposicao.service import analisar_produto
+from src.reposicao.ponte import compra_aprovada, enviar_compra
 
 
 AJUDA = {
@@ -118,6 +119,7 @@ class Painel(tk.Tk):
             ("Aceitar sugestão", lambda: self._decidir("Aceitar")),
             ("Ajustar", lambda: self._decidir("Ajustar")),
             ("Adiar", lambda: self._decidir("Adiar")),
+            ("Enviar para Contas a Pagar", self._enviar_compra),
         ):
             ttk.Button(acoes, text=texto, command=acao).pack(side="left", padx=(0, 7))
         ttk.Label(raiz, textvariable=self.status, foreground="#555555").pack(anchor="w")
@@ -261,6 +263,30 @@ class Painel(tk.Tk):
             except OSError as erro:
                 messagebox.showerror("Erro ao exportar CSV", str(erro))
 
+    def _enviar_compra(self) -> None:
+        if not self.selecionado:
+            messagebox.showinfo("Selecione um produto", "Selecione um produto na lista.")
+            return
+        produto = next(p for p in self.produtos if p.sku == self.selecionado)
+        try:
+            pedido_id, quantidade = compra_aprovada(self.caminho_dados.parent / "decisoes.csv", produto.sku)
+        except (OSError, ValueError, KeyError) as erro:
+            messagebox.showerror("Compra não aprovada", str(erro))
+            return
+        preco = simpledialog.askstring("Preço da compra", "Preço por unidade (R$):", parent=self)
+        if preco is None:
+            return
+        vencimento = simpledialog.askstring("Vencimento", "Data para pagar (AAAA-MM-DD):", parent=self)
+        if vencimento is None:
+            return
+        try:
+            resposta = enviar_compra(produto, pedido_id, quantidade, preco, vencimento.strip())
+            verbo = "criada" if resposta.get("criada") else "já existente"
+            self.status.set(f"Conta {verbo}: pedido {pedido_id}, valor R$ {resposta['valor']}.")
+            messagebox.showinfo("Ponte concluída", "Compra enviada. Em Contas a Pagar, clique em Atualizar.")
+        except (ValueError, ConnectionError, KeyError) as erro:
+            messagebox.showerror("Não foi possível enviar", str(erro))
+
     def _decidir(self, decisao: str) -> None:
         if not self.selecionado:
             messagebox.showinfo("Selecione um produto", "Selecione um produto na lista.")
@@ -282,6 +308,9 @@ class Painel(tk.Tk):
         try:
             registrar_decisao(caminho, produto.sku, decisao, quantidade, motivo)
             self.status.set(f"Decisão registrada em {caminho.name}: {decisao}, {quantidade} unidade(s).")
+            if decisao in {"Aceitar", "Ajustar"} and quantidade > 0:
+                if messagebox.askyesno("Criar conta a pagar", "Enviar esta compra para Contas a Pagar agora?"):
+                    self._enviar_compra()
         except (OSError, ValueError) as erro:
             messagebox.showerror("Erro ao registrar decisão", str(erro))
 
