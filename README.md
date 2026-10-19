@@ -1,10 +1,30 @@
-# Reposição Automática de Estoque 
+# Planejamento de Reposição de Estoque
 
 ![Tela inicial da Reposição com dados fictícios](docs/screenshots/tela-inicial.png)
 
 Aplicação Python leve para acompanhar produtos e sugerir compras. Usa apenas a biblioteca padrão, incluindo Tkinter para a janela. Nenhum pedido é enviado automaticamente.
 
-## Abrir
+## Visão geral
+
+Projeto de portfólio voltado à decisão de **quando e quanto repor**. Considera consumo médio, prazo de entrega, estoque de segurança e restrições do fornecedor, com interface desktop e alternativa pelo terminal.
+
+**Tecnologias:** Python · Tkinter · dataclasses · JSON · CSV · unittest.
+
+### Destaques técnicos
+
+- Regras de reposição separadas da interface e da persistência.
+- Quantidades ajustadas à compra mínima e aos múltiplos do fornecedor.
+- Importação e exportação de dados e registro das decisões do usuário.
+- Testes de cálculo, arquivos, interface e ponte de integração em `tests/`.
+
+## Executar localmente
+
+```bash
+git clone https://github.com/LucasSMFerreira/Reposi-o-Automatica-Estoque.git
+cd Reposi-o-Automatica-Estoque
+```
+
+### Interface
 
 Requer Python 3.10 ou superior. Na pasta do projeto:
 
@@ -58,20 +78,26 @@ tests/                  Testes
 
 A lógica permanece separada da interface para facilitar o futuro executável e a integração com previsão de demanda.
 
-## Enviar uma compra aprovada para Contas a Pagar
+## Exemplo de cálculo
 
-Abra o projeto de [Contas a Pagar](https://github.com/LucasSMFerreira/Controle-Contas) em outra janela, salve o arquivo de contas e clique em **Ativar ponte**. Em Reposição, selecione um produto e clique em **Aceitar sugestão** ou **Ajustar**. O programa oferece criar a conta a pagar; informe preço por unidade e vencimento. Se a API estiver desligada, a decisão fica registrada e o botão **Enviar para Contas a Pagar** permite tentar novamente. A mesma aprovação tem um número de pedido estável para evitar contas duplicadas.
+Com consumo de 10 unidades/dia, prazo de 3 dias, segurança de 5 unidades e revisão de 2 dias:
 
-O programa não compra mercadorias nem efetua pagamentos. O envio acontece apenas depois de uma decisão de compra aprovada.
+- Ponto de reposição: `ceil(10 × 3 + 5) = 35` unidades.
+- Com 20 unidades disponíveis, estoque alvo: `ceil(10 × (3 + 2) + 5) = 55`.
+- Necessidade: `55 − 20 = 35`. Para compra mínima de 20 e múltiplo de 10, a sugestão é **40 unidades**.
 
-## Como os projetos se encaixam
+## Escopo e limites
 
-Este painel funciona sozinho: calcula a necessidade de reposição e registra decisões sem depender dos outros projetos. Quando o usuário aprova uma compra e ativa a API local de Contas a Pagar, o botão de envio cria a despesa correspondente com número de pedido, valor e vencimento. O [projeto de Previsão de Demanda](https://github.com/LucasSMFerreira/Previsao-demanda-estoque) pode futuramente fornecer a estimativa de consumo; essa etapa ainda não está conectada automaticamente.
+- O programa sugere quantidades; não compra mercadorias nem efetua pagamentos.
+- O consumo médio é informado, sem previsão automática integrada.
+- Registrar uma decisão não altera o estoque disponível.
+- O uso principal funciona sozinho. Há código de integração opcional com módulos privados de compras e financeiro; esses módulos não são necessários para executar a demonstração pública.
+- A integração usa uma API local e depende de configuração e confirmação do usuário; não faz parte do roteiro básico deste portfólio.
 
-Os três módulos foram mantidos em repositórios separados para compor uma aplicação final sem concentrar toda a lógica em um único arquivo.
+## Projeto relacionado
 
-## Pedidos no módulo de Compras e Fornecedores
+[Previsão de Demanda e Planejamento de Estoque](https://github.com/LucasSMFerreira/Previsao-demanda-estoque) explora séries temporais, modelos de aprendizado e avaliação de previsões. A conexão automática entre os projetos é uma evolução planejada.
 
-O [módulo de Compras e Fornecedores](https://github.com/LucasSMFerreira/Compra-Fornecedores) organiza a etapa seguinte à decisão de reposição. Salve o JSON de produtos, registre **Aceitar sugestão** ou **Ajustar** e, em Compras, clique em **Importar da Reposição** para escolher esse JSON e o `decisoes.csv` da mesma pasta. A decisão vira um rascunho de pedido com SKU, fornecedor e quantidade; preço e vencimento são preenchidos e conferidos em Compras antes da aprovação.
+## Licença
 
-Depois de aprovar, o botão **Criar conta a pagar** de Compras chama a API local de [Contas a Pagar](https://github.com/LucasSMFerreira/Controle-Contas): `POST /api/v1/pedidos-reposicao` em `127.0.0.1:8765`. O corpo contém `pedido_id`, `sku`, `produto`, `fornecedor`, `quantidade`, `valor_unitario` e `vencimento`. A resposta contém `conta_id`; repetir o mesmo `pedido_id` não duplica a conta. Se usar Compras para acompanhar o pedido, envie ao financeiro por lá em vez do botão direto desta tela. Registrar a entrega em Compras ainda não aumenta o estoque automaticamente aqui.
+Este repositório ainda não contém uma licença de uso explícita.
