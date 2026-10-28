@@ -20,8 +20,8 @@ Projeto de portfólio voltado à decisão de **quando e quanto repor**. Consider
 ## Executar localmente
 
 ```bash
-git clone https://github.com/LucasSMFerreira/Reposi-o-Automatica-Estoque.git
-cd Reposi-o-Automatica-Estoque
+git clone https://github.com/LucasSMFerreira/reposicao-estoque.git
+cd reposicao-estoque
 ```
 
 ### Interface
@@ -96,8 +96,8 @@ Com consumo de 10 unidades/dia, prazo de 3 dias, segurança de 5 unidades e revi
 
 ## Projeto relacionado
 
-[Previsão de Demanda e Planejamento de Estoque](https://github.com/LucasSMFerreira/Previsao-demanda-estoque) explora séries temporais, modelos de aprendizado e avaliação de previsões. A conexão automática entre os projetos é uma evolução planejada.
+[Previsão de Demanda e Planejamento de Estoque](https://github.com/LucasSMFerreira/previsao-vendas-estoque) explora séries temporais, modelos de aprendizado e avaliação de previsões. A conexão automática entre os projetos é uma evolução planejada.
 
 ## Licença
 
-Este repositório ainda não contém uma licença de uso explícita.
+Distribuído sob a [licença MIT](LICENSE).
